@@ -21,5 +21,5 @@ public class CardActions : MonoBehaviour
 
     private void OnDisable() => button.onClick.RemoveListener(CardSelected);
 
-    public void CardSelected() => OnCardSelected?.Invoke(this, new EventArgs_OnCardSelected { card = _card });
+    private void CardSelected() => OnCardSelected?.Invoke(this, new EventArgs_OnCardSelected { card = _card });
 }
