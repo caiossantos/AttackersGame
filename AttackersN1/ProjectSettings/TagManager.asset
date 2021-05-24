@@ -6,6 +6,11 @@ TagManager:
   tags:
   - GroundAlly
   - GroundEnemy
+  - Ally
+  - Enemy
+  - AllyObjective
+  - EnemyObjective
+  - WorldCanvas
   layers:
   - Default
   - TransparentFX
