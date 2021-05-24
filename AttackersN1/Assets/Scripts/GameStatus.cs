@@ -5,8 +5,8 @@ public class GameStatus : MonoBehaviour
     public static GameStatus Instance { get; private set; }
 
     [SerializeField] private Light _light;
-    [SerializeField] private LayerMask _groundCorrect;
-    [SerializeField] private LayerMask _groundIncorrect;
+    private string _groundCorrect = "GroundAlly";
+    private string _groundIncorrect = "GroundEnemy";
 
     private Card _currentCard;
     private Mouse _mouse;
@@ -34,7 +34,9 @@ public class GameStatus : MonoBehaviour
         CardActions.OnCardSelected -= CardSelected;
     }
 
-    private void Update()
+    private void Update() => CharatersPlaceAndMouseHighlight();
+
+    private void CharatersPlaceAndMouseHighlight()
     {
         if (_currentCard != null)
         {
@@ -43,13 +45,13 @@ public class GameStatus : MonoBehaviour
             if (!_light.enabled)
                 _light.enabled = true;
 
-            if (_mouse.Aiming(out mousePoint, _groundCorrect))
+            if (_mouse.Aiming(_groundCorrect, out mousePoint))
             {
                 _light.color = Color.green;
                 _light.transform.position = mousePoint + new Vector3(0f, 0.01f, 0f);
             }
 
-            if(_mouse.Aiming(out mousePoint, _groundIncorrect))
+            if (_mouse.Aiming(_groundIncorrect, out mousePoint))
             {
                 _light.color = Color.red;
                 _light.transform.position = mousePoint + new Vector3(0f, 0.01f, 0f);
@@ -57,7 +59,7 @@ public class GameStatus : MonoBehaviour
 
             if (Input.GetMouseButtonDown(0))
             {
-                if (_mouse.Aiming(out mousePoint, _groundCorrect))
+                if (_mouse.Aiming(_groundCorrect, out mousePoint))
                 {
                     Instantiate(_currentCard.prefab, mousePoint, Quaternion.identity);
                     _currentCard = null;
