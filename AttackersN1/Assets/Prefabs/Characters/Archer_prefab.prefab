@@ -19,6 +19,28 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!195 &752634733343192217
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1954708524335038765}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.34
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 1.79
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1001 &1172199794
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -89,15 +111,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b1d76ce4215ad20489bbef544a2589a3, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.1409266
+      value: 5.88
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b1d76ce4215ad20489bbef544a2589a3, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.49999994
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b1d76ce4215ad20489bbef544a2589a3, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -3.63
+      value: -4.47058
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b1d76ce4215ad20489bbef544a2589a3, type: 3}
       propertyPath: m_LocalRotation.w
@@ -129,7 +151,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: b1d76ce4215ad20489bbef544a2589a3, type: 3}
       propertyPath: m_Name
-      value: Archer Variant
+      value: Archer_prefab
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b1d76ce4215ad20489bbef544a2589a3, type: 3}
