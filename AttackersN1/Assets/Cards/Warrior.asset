@@ -17,5 +17,5 @@ MonoBehaviour:
   attack: 20
   attackSpeed: 1.1
   enemyDetectionRange: 10
-  enemyAttackRange: 2
+  enemyAttackRange: 1.88
   prefab: {fileID: 9080564065670873654, guid: c123ec12d250ab04d83193f74d042949, type: 3}

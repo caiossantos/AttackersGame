@@ -13,12 +13,12 @@ public abstract class BTNode
     public abstract IEnumerator Run(BTRoot root);
 
     //Método para debug
-    public void Print()
+    public void Print(string message = "")
     {
         string color = "cyan";
         if (status == Status.SUCCESS) color = "green";
         if (status == Status.FAILURE) color = "orange";
 
-        Debug.Log($"<color={color}> {this} : {status} </color>");
+        Debug.Log($"<color={color}> {this} : {status} </color>.  {message}");
     }
 }
