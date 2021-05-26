@@ -117,7 +117,7 @@ public class Skeleton : Enemy
         {
             foreach (Collider collider in colliders)
             {
-                if (collider.gameObject != gameObject)
+                if (collider.gameObject != gameObject && collider.CompareTag(_enemyTag))
                 {
                     Enemy damage = collider.GetComponent<Enemy>();
                     if (damage != null)

@@ -2,8 +2,10 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Warrior : Enemy
+public class Archer : Enemy
 {
+    [SerializeField] private GameObject _arrow;
+
     private BTRoot behaviour;
     private Animator _animator;
     private NavMeshAgent _navMeshAgent;
@@ -37,7 +39,6 @@ public class Warrior : Enemy
         attackSequence1.children.Add(inverterEnemyNearAttackRange);
             BTInverter inverterMove = new BTInverter();
             inverterMove.children.Add(new NodeIsMoving(_navMeshAgent));
-         attackSequence1.children.Add(inverterMove);
          attackSequence1.children.Add(new NodeGoToTarget("Enemy", _navMeshAgent));
 
         BTSequence attackSequence2 = new BTSequence();
@@ -47,7 +48,7 @@ public class Warrior : Enemy
         BTSequence attackSequence3 = new BTSequence();
         attackSequence3.children.Add(new NodeEnemyNear("Enemy", Card.enemyAttackRange));
         attackSequence3.children.Add(new NodeStopNavMeshDestination(_navMeshAgent));
-        attackSequence3.children.Add(new NodeAttack("Enemy", Card.enemyAttackRange));
+        attackSequence3.children.Add(new NodeAttack("Enemy", Card.enemyAttackRange, 8f));
 
         BTSelector attackSelector1 = new BTSelector();
         attackSelector1.children.Add(attackSequence3);
@@ -93,19 +94,8 @@ public class Warrior : Enemy
 
     private IEnumerator DoAttack()
     {
-        Collider[] colliders = Physics.OverlapSphere(Muzzle.transform.position, Card.attackArea);
-        if (colliders != null)
-        {
-            foreach (Collider collider in colliders)
-            {
-                if (collider.gameObject != gameObject && collider.CompareTag("Enemy"))
-                {
-                    Enemy damage = collider.GetComponent<Enemy>();
-                    if (damage != null)
-                        damage.Damage(Card.attackDamage);
-                }
-            }
-        }
+        Arrow arrow = Instantiate(_arrow, Muzzle.position, transform.rotation).GetComponent<Arrow>();
+        arrow.SetArrowDamage(Card.attackDamage);
 
         _isAttacking = true;
 

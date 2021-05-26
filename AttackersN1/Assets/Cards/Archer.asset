@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: Archer
   m_EditorClassIdentifier: 
   cardName: Archer
-  life: 0
-  attack: 0
-  attackSpeed: 0
-  enemyDetectionRange: 0
-  enemyAttackRange: 0
+  life: 70
+  attackDamage: 16
+  attackSpeed: 0.6
+  attackArea: 8
+  enemyDetectionRange: 8
+  enemyAttackRange: 8
   prefab: {fileID: 1954708524335038765, guid: ef5bddae2b98fb14db2f8f6499230a97, type: 3}

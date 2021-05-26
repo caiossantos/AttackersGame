@@ -16,7 +16,7 @@ MonoBehaviour:
   life: 100
   attackDamage: 20
   attackSpeed: 0.9
-  attackArea: 1
+  attackArea: 1.5
   enemyDetectionRange: 10
   enemyAttackRange: 1.88
   prefab: {fileID: 165424, guid: 9f4313a771e05c64d8da7ae6bd19a19f, type: 3}
