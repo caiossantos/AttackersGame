@@ -4,9 +4,12 @@ public abstract class Enemy : MonoBehaviour, IDamage
 {
     [SerializeField] private GameObject _lifeUI;
     [SerializeField] private Card _card;
+    [SerializeField] private Transform _muzzle;
 
     protected Card Card { get { return _card; } }
     protected LifeSystem LifeStatus { get; private set; }
+    protected UiLifeEnemy UILife { get; private set; }
+    public Transform Muzzle { get { return _muzzle; } }
 
     protected void EnemyInit()
     {
@@ -14,15 +17,15 @@ public abstract class Enemy : MonoBehaviour, IDamage
 
         //UI Life
         var newUI = Instantiate(_lifeUI, Vector3.zero, Quaternion.Euler(-45f, 90f, 0f));
-        UiLifeEnemy uiLifeEnemy = newUI.GetComponent<UiLifeEnemy>();
-        uiLifeEnemy.SetValues(transform, _card.life);
+        UILife = newUI.GetComponent<UiLifeEnemy>();
+        UILife.SetValues(transform, _card.life);
     }
 
     public abstract void BehaviourTree();
 
     public abstract void Damage(float damage);
 
-    protected abstract void DeathCheck(bool batAttack);
+    protected abstract void DeathCheck();
 
-    public abstract void Attack();
+    public abstract void Attack(string tag);
 }

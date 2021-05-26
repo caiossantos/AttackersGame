@@ -2,43 +2,34 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BTSelectorParallel : BTNode
+public class BTSequenceParallel : BTNode
 {
     public override IEnumerator Run(BTRoot root)
     {
-        status = Status.RUNNING;
+        status = Status.SUCCESS;
 
         //Print();
 
-        //Manter uma referência para as Coroutines que estarão rodando
         Dictionary<BTNode, Coroutine> routines = new Dictionary<BTNode, Coroutine>();
 
         foreach (BTNode node in children)
         {
-            //Inicia a Coroutine e armazena uma referência no Dictionary
-            routines.Add(node, root.StartCoroutine(node.Run(root)));    
+            routines.Add(node, root.StartCoroutine(node.Run(root)));
         }
 
         while (true)
         {
-            //Assumimos a falha caso não achemos o contrário
-            status = Status.FAILURE;
-
-            //Verifica o status dos filhos
             foreach (BTNode node in children)
             {
                 if (node.status == Status.RUNNING)
                 {
-                    //Se alguém estiver em Runnig o SelectorParallel continua com status Running
-                    status = Status.RUNNING;  
+                    status = Status.RUNNING;
                     break;
                 }
-                else if (node.status == Status.SUCCESS)
+                else if (node.status == Status.FAILURE)
                 {
-                    //Com isso, se todos os filhos derem Success o SelectorParallel dará Success
-                    status = Status.SUCCESS;
-                      
-                    //Stop todas as Coroutines
+                    status = Status.FAILURE;
+                        
                     foreach (var routineNode in routines)
                     {
                         if (routineNode.Value != null)
@@ -49,17 +40,14 @@ public class BTSelectorParallel : BTNode
                 }
             }
 
-            //Se não estiver Running sai do while loop
             if (status != Status.RUNNING) break;
 
-            //Para cada node que terminar em Failure, inicia novamente sua coroutine
             foreach (BTNode node in children)
             {
-                if (node.status == Status.FAILURE)
+                if (node.status == Status.SUCCESS)
                     routines[node] = root.StartCoroutine(node.Run(root));
             }
 
-            //Para que o while não rode todo frame
             yield return new WaitForSeconds(.1f);
         }
 

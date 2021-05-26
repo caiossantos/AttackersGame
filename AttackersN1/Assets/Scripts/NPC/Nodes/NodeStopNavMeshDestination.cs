@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.AI;
 
 public class NodeStopNavMeshDestination : BTNode
@@ -9,13 +10,17 @@ public class NodeStopNavMeshDestination : BTNode
 
     public override IEnumerator Run(BTRoot root)
     {
+        yield return new WaitForSeconds(.4f);
+
         status = Status.FAILURE;
 
-        _navMeshAgent.ResetPath();
-        _navMeshAgent.isStopped = true;
-        _navMeshAgent.isStopped = false;
+        if (_navMeshAgent.hasPath)
+        {
+            _navMeshAgent.ResetPath();
+            _navMeshAgent.velocity = Vector3.zero;
+        }
 
-        if (!_navMeshAgent.hasPath)
+        if (_navMeshAgent.velocity == Vector3.zero)
             status = Status.SUCCESS;
 
         yield break;

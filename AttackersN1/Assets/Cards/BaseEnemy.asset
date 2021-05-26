@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 453799c4c9acf8b46b9255c95aedbcec, type: 3}
-  m_Name: Warrior
+  m_Name: BaseEnemy
   m_EditorClassIdentifier: 
-  cardName: Warrior
-  life: 100
-  attackDamage: 25
-  attackSpeed: 1.1
-  attackArea: 1
-  enemyDetectionRange: 10
-  enemyAttackRange: 1.88
-  prefab: {fileID: 9080564065670873654, guid: c123ec12d250ab04d83193f74d042949, type: 3}
+  cardName: Base Enemy
+  life: 500
+  attackDamage: 0
+  attackSpeed: 0
+  attackArea: 0
+  enemyDetectionRange: 0
+  enemyAttackRange: 0
+  prefab: {fileID: 0}

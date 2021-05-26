@@ -1,9 +1,13 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Warrior : Enemy
+public class Skeleton : Enemy
 {
+    private string _enemyTag = "Ally";
+    private string _objectiveTag = "EnemyObjective";
+
     private BTRoot behaviour;
     private Animator _animator;
     private NavMeshAgent _navMeshAgent;
@@ -25,28 +29,28 @@ public class Warrior : Enemy
             _animator.SetBool("IsMoving", false);
     }
 
-    public override void BehaviourTree()
+    public override void BehaviourTree() 
     {
         behaviour = GetComponent<BTRoot>();
 
         #region ATTACK_ENEMY
         BTSequence attackSequence1 = new BTSequence();
-        attackSequence1.children.Add(new NodeEnemyNear("Enemy", Card.enemyDetectionRange));
-            BTInverter inverterEnemyNearAttackRange = new BTInverter();
-            inverterEnemyNearAttackRange.children.Add(new NodeEnemyNear("Enemy", Card.enemyAttackRange));
+        attackSequence1.children.Add(new NodeEnemyNear(_enemyTag, Card.enemyDetectionRange));
+        BTInverter inverterEnemyNearAttackRange = new BTInverter();
+        inverterEnemyNearAttackRange.children.Add(new NodeEnemyNear(_enemyTag, Card.enemyAttackRange));
         attackSequence1.children.Add(inverterEnemyNearAttackRange);
-            BTInverter inverterMove = new BTInverter();
-            inverterMove.children.Add(new NodeIsMoving(_navMeshAgent));
-         attackSequence1.children.Add(new NodeGoToTarget("Enemy", _navMeshAgent));
+        BTInverter inverterMove = new BTInverter();
+        inverterMove.children.Add(new NodeIsMoving(_navMeshAgent));
+        attackSequence1.children.Add(new NodeGoToTarget(_enemyTag, _navMeshAgent));
 
         BTSequence attackSequence2 = new BTSequence();
-        attackSequence2.children.Add(new NodeEnemyNear("Enemy", Card.enemyAttackRange));
+        attackSequence2.children.Add(new NodeEnemyNear(_enemyTag, Card.enemyAttackRange));
         attackSequence2.children.Add(new NodeStopNavMeshDestination(_navMeshAgent));
 
         BTSequence attackSequence3 = new BTSequence();
-        attackSequence3.children.Add(new NodeEnemyNear("Enemy", Card.enemyAttackRange));
+        attackSequence3.children.Add(new NodeEnemyNear(_enemyTag, Card.enemyAttackRange));
         attackSequence3.children.Add(new NodeStopNavMeshDestination(_navMeshAgent));
-        attackSequence3.children.Add(new NodeAttack("Enemy", Card.enemyAttackRange));
+        attackSequence3.children.Add(new NodeAttack(_enemyTag, Card.enemyAttackRange));
 
         BTSelector attackSelector1 = new BTSelector();
         attackSelector1.children.Add(attackSequence3);
@@ -56,15 +60,15 @@ public class Warrior : Enemy
 
         #region OBJECTIVE_ATTACK
         BTSequence objectiveSequence1 = new BTSequence();
-            BTInverter objectiveInverter1 = new BTInverter();
-        objectiveInverter1.children.Add(new NodeEnemyNear("AllyObjective", Card.enemyAttackRange));
+        BTInverter objectiveInverter1 = new BTInverter();
+        objectiveInverter1.children.Add(new NodeEnemyNear(_objectiveTag, Card.enemyAttackRange));
         objectiveSequence1.children.Add(objectiveInverter1);
-        objectiveSequence1.children.Add(new NodeGoToTarget("AllyObjective", _navMeshAgent));
+        objectiveSequence1.children.Add(new NodeGoToTarget(_objectiveTag, _navMeshAgent));
 
         BTSequence objectiveSequence2 = new BTSequence();
-        objectiveSequence2.children.Add(new NodeEnemyNear("AllyObjective", Card.enemyAttackRange));
+        objectiveSequence2.children.Add(new NodeEnemyNear(_objectiveTag, Card.enemyAttackRange));
         objectiveSequence2.children.Add(new NodeStopNavMeshDestination(_navMeshAgent));
-        objectiveSequence2.children.Add(new NodeAttack("AllyObjective", Card.attackArea));
+        objectiveSequence2.children.Add(new NodeAttack(_objectiveTag, Card.attackArea));
 
         BTSelector objectiveSelector1 = new BTSelector();
         objectiveSelector1.children.Add(objectiveSequence2);
@@ -79,13 +83,29 @@ public class Warrior : Enemy
         StartCoroutine(behaviour.Execute());
     }
 
+    public override void Damage(float damage) 
+    {
+        LifeStatus.RemoveLife(damage);
+        UILife.ChangeValue(LifeStatus.CurrentLife);
+        DeathCheck();
+    }
+
+    protected override void DeathCheck()
+    {
+        if (LifeStatus.IsDead())
+        {
+            UILife.Destroy();
+            Destroy(gameObject);
+        }
+    }
+
     public override void Attack(string tag)
     {
         _animator.SetTrigger("IsAttacking");
 
         Transform enemy = CheckUtilities.GetTheNearestGameObjectWithTag(transform.position, tag).transform;
         transform.LookAt(enemy.position, Vector3.up);
-        
+
         if (!_isAttacking)
             StartCoroutine(DoAttack());
     }
@@ -112,33 +132,4 @@ public class Warrior : Enemy
 
         _isAttacking = false;
     }
-
-    public override void Damage(float damage)
-    {
-        LifeStatus.RemoveLife(damage);
-        UILife.ChangeValue(LifeStatus.CurrentLife);
-        DeathCheck();
-    }
-
-    protected override void DeathCheck()
-    {
-        if (LifeStatus.IsDead())
-        {
-            UILife.Destroy();
-            Destroy(gameObject);
-        }
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, Card.enemyDetectionRange);
-        
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, Card.enemyAttackRange);
-        
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(Muzzle.transform.position, Card.enemyAttackRange);
-    }
-
 }
