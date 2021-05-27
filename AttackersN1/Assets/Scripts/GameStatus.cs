@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 public class GameStatus : MonoBehaviour
@@ -7,22 +8,29 @@ public class GameStatus : MonoBehaviour
     public static GameStatus Instance { get; private set; }
 
     [SerializeField] private Light _light;
-    private string _groundCorrect = "GroundAlly";
-    private string _groundIncorrect = "GroundEnemy";
-
-    private Card _currentCard;
-    private Mouse _mouse;
 
     [Header("Mana")]
     [SerializeField] private int _totalMana;
     [SerializeField] private int _inicialMana;
     [SerializeField] private float _regenerationTime;
     [SerializeField] private TMP_Text _txtCurrentMana;
-    [SerializeField] private int _currentMana;
+    private int _currentMana;
 
     [Header("Enemy Spawn")]
     [SerializeField] private float timeStep;
     [SerializeField] private int enemiesToSpawn;
+
+    [Header("UI Geral")]
+    [SerializeField] private GameObject uiSuccessState;
+    [SerializeField] private GameObject uiVictory;
+    [SerializeField] private GameObject uiDefeat;
+
+    private const string GROUND_CORRECT = "GroundAlly";
+    private const string GROUND_INCORRET = "GroundEnemy";
+    public const string MENU_SCENE_NAME = "MainMenu";
+    private Card _currentCard;
+    private Mouse _mouse;
+    private Spawner[] spawners;
 
     private void Awake()
     {
@@ -32,6 +40,8 @@ public class GameStatus : MonoBehaviour
             Destroy(gameObject);
     }
 
+    private void OnEnable() => CardActions.OnCardSelected += CardSelected;
+
     private void Start()
     {
         _mouse = GetComponent<Mouse>();
@@ -40,24 +50,16 @@ public class GameStatus : MonoBehaviour
         UpdateManaText();
         StartCoroutine(ManaRegeneration());
 
-        Spawner[] spawners = GameObject.FindObjectsOfType<Spawner>();
+        spawners = FindObjectsOfType<Spawner>();
         foreach (Spawner spawner in spawners)
         {
             spawner.InitSpawn(enemiesToSpawn, timeStep);
         }
     }
 
-    private void OnEnable()
-    {
-        CardActions.OnCardSelected += CardSelected;
-    }
-
-    private void OnDisable()
-    {
-        CardActions.OnCardSelected -= CardSelected;
-    }
-
     private void Update() => CharacterPlacement();
+
+    private void OnDisable() => CardActions.OnCardSelected -= CardSelected;
 
     private IEnumerator ManaRegeneration()
     {
@@ -87,7 +89,7 @@ public class GameStatus : MonoBehaviour
             {
                 if (_currentMana < _currentCard.manaCost) return;
 
-                if (_mouse.Aiming(_groundCorrect, out mousePoint))
+                if (_mouse.Aiming(GROUND_CORRECT, out mousePoint))
                 {
                     Instantiate(_currentCard.prefab, mousePoint, Quaternion.identity);
                     _currentMana -= _currentCard.manaCost;
@@ -107,14 +109,14 @@ public class GameStatus : MonoBehaviour
     {
         _light.enabled = false;
 
-        if (_mouse.Aiming(_groundCorrect, out mousePoint))
+        if (_mouse.Aiming(GROUND_CORRECT, out mousePoint))
         {
             _light.enabled = true;
             _light.color = Color.green;
             _light.transform.position = mousePoint + new Vector3(0f, 0.01f, 0f);
         }
 
-        if (_mouse.Aiming(_groundIncorrect, out mousePoint))
+        if (_mouse.Aiming(GROUND_INCORRET, out mousePoint))
         {
             _light.enabled = true;
             _light.color = Color.red;
@@ -127,4 +129,26 @@ public class GameStatus : MonoBehaviour
         _currentCard = null;
         _currentCard = e.card;
     }
+
+    #region UI
+    public void SetSuccessState(bool state)
+    {
+        foreach (Spawner spawner in spawners)
+        {
+            spawner.Pause(true);
+        }
+        uiSuccessState.SetActive(true);
+
+        if (state)
+        {
+            uiVictory.SetActive(true);
+
+        }
+    }
+
+    public void BtnPlayAgain() => SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    public void BtnBackToMenu() => SceneManager.LoadScene(MENU_SCENE_NAME);
+    public void BtnQuitGame() => Application.Quit();
+
+    #endregion
 }

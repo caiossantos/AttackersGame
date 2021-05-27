@@ -4,13 +4,13 @@ using UnityEngine;
 public class Spawner : MonoBehaviour
 {
     [SerializeField] private GameObject prefabEnemyToSpawn;
-    public bool IsPaused { get; private set; }
+    public bool IsPaused { get; private set; } = true;
 
     private float _currentTimeStep;
     private int _currentEnemiesToSpawn;
     private float timer;
 
-    void Update() { if (_currentEnemiesToSpawn != 0) Spawn(); }
+    void Update() { if (_currentEnemiesToSpawn != 0 && !IsPaused) Spawn(); }
 
     private void Spawn()
     {
@@ -38,10 +38,12 @@ public class Spawner : MonoBehaviour
         _currentEnemiesToSpawn = enemiesNumber;
         _currentTimeStep = timeStep;
         timer = Time.deltaTime + _currentTimeStep;
+        StartCoroutine(SpawnWithTimeWait(0f));
         IsPaused = false;
     }
     public void SetTimeStep(float timeStep) => _currentTimeStep = timeStep;
     public void SetEnemiesNumber(int enemiesNumber) => _currentEnemiesToSpawn = enemiesNumber;
+    public void Pause(bool state) => IsPaused = state;
     
     //Nunca usados
     public void SetSpawn(int enemiesNumber, float timeStep)
@@ -49,5 +51,4 @@ public class Spawner : MonoBehaviour
         SetEnemiesNumber(enemiesNumber);
         SetTimeStep(timeStep);
     }
-    public void Pause(bool state) => IsPaused = state;
 }
