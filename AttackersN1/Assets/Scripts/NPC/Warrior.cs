@@ -81,9 +81,10 @@ public class Warrior : Enemy
     {
         _animator.SetTrigger("IsAttacking");
 
-        Transform enemy = CheckUtilities.GetTheNearestGameObjectWithTag(transform.position, tag).transform;
-        transform.LookAt(enemy.position, Vector3.up);
-        
+        GameObject enemy = CheckUtilities.GetTheNearestGameObjectWithTag(transform.position, tag);
+        if (enemy != null)
+            transform.LookAt(enemy.transform.position, Vector3.up);
+
         if (!_isAttacking)
             StartCoroutine(DoAttack(tag));
     }

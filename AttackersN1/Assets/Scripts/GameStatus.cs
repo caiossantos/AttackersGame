@@ -8,7 +8,9 @@ public class GameStatus : MonoBehaviour
     public static GameStatus Instance { get; private set; }
 
     [SerializeField] private Light _light;
-
+    [SerializeField] private float gameTime;
+    [SerializeField] private TMP_Text _txtTimer;
+    
     [Header("Mana")]
     [SerializeField] private int _totalMana;
     [SerializeField] private int _inicialMana;
@@ -31,9 +33,13 @@ public class GameStatus : MonoBehaviour
     private Card _currentCard;
     private Mouse _mouse;
     private Spawner[] spawners;
+    private float timer;
 
     private void Awake()
     {
+        if (Time.timeScale != 1f)
+            Time.timeScale = 1f;
+
         if (Instance == null)
             Instance = this;
         else
@@ -55,9 +61,24 @@ public class GameStatus : MonoBehaviour
         {
             spawner.InitSpawn(enemiesToSpawn, timeStep);
         }
+
+        timer += Time.deltaTime + gameTime;
     }
 
-    private void Update() => CharacterPlacement();
+    private void Update()
+    {
+        if (timer <= 0f)
+        {
+            SetSuccessState(false);
+        }
+        else
+        {
+            timer -= Time.deltaTime;
+            _txtTimer.SetText("{0:00}:{1:00}", (int)(timer / 60), (int)(timer % 60));
+        }
+
+        CharacterPlacement();
+    }
 
     private void OnDisable() => CardActions.OnCardSelected -= CardSelected;
 
@@ -75,7 +96,7 @@ public class GameStatus : MonoBehaviour
         }
     }
 
-    private void UpdateManaText() => _txtCurrentMana.SetText($"<b>{_currentMana}</b> / <b>{_totalMana}</b>");
+    private void UpdateManaText() => _txtCurrentMana.SetText($"<b>{_currentMana}</b>");
 
     private void CharacterPlacement()
     {
@@ -133,6 +154,8 @@ public class GameStatus : MonoBehaviour
     #region UI
     public void SetSuccessState(bool state)
     {
+        Time.timeScale = 0f;
+
         foreach (Spawner spawner in spawners)
         {
             spawner.Pause(true);
@@ -140,10 +163,9 @@ public class GameStatus : MonoBehaviour
         uiSuccessState.SetActive(true);
 
         if (state)
-        {
             uiVictory.SetActive(true);
-
-        }
+        else
+            uiDefeat.SetActive(true);
     }
 
     public void BtnPlayAgain() => SceneManager.LoadScene(SceneManager.GetActiveScene().name);
