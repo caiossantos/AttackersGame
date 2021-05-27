@@ -26,6 +26,7 @@ public class GameStatus : MonoBehaviour
     [SerializeField] private GameObject uiSuccessState;
     [SerializeField] private GameObject uiVictory;
     [SerializeField] private GameObject uiDefeat;
+    [SerializeField] private GameObject uiPause;
 
     private const string GROUND_CORRECT = "GroundAlly";
     private const string GROUND_INCORRET = "GroundEnemy";
@@ -77,10 +78,28 @@ public class GameStatus : MonoBehaviour
             _txtTimer.SetText("{0:00}:{1:00}", (int)(timer / 60), (int)(timer % 60));
         }
 
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Pause();
+        }
+
         CharacterPlacement();
     }
-
     private void OnDisable() => CardActions.OnCardSelected -= CardSelected;
+
+    public void Pause()
+    {
+        if (Time.timeScale != 0f)
+        {
+            Time.timeScale = 0f;
+            uiPause.SetActive(true);
+        }
+        else
+        {
+            uiPause.SetActive(false);
+            Time.timeScale = 1f;
+        }
+    }
 
     private IEnumerator ManaRegeneration()
     {
@@ -167,7 +186,6 @@ public class GameStatus : MonoBehaviour
         else
             uiDefeat.SetActive(true);
     }
-
     public void BtnPlayAgain() => SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     public void BtnBackToMenu() => SceneManager.LoadScene(MENU_SCENE_NAME);
     public void BtnQuitGame() => Application.Quit();
