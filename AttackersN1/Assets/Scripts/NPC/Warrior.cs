@@ -54,6 +54,7 @@ public class Warrior : Enemy
         isObjectiveOutsideMyAttackRange.children.Add(new NodeEnemyNear("AllyObjective", Card.enemyAttackRange));
         objectiveSequence1.children.Add(isObjectiveOutsideMyAttackRange);
         attackSequence1.children.Add(new NodeEnemyNear("AllyObjective", Card.enemyDetectionRange));
+        //objectiveSequence1.children.Add(new NodeEnemyNear("AllyObjective", Card.enemyDetectionRange));
         BTInverter imStoppedObjective = new BTInverter();
         imStoppedObjective.children.Add(new NodeIsMoving(_navMeshAgent));
         objectiveSequence1.children.Add(imStoppedObjective);

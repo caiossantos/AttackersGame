@@ -6,8 +6,8 @@ public abstract class Enemy : MonoBehaviour, IDamage
     [SerializeField] private Card _card;
     [SerializeField] private Transform _muzzle = null;
 
-    protected Card Card { get { return _card; } }
-    protected LifeSystem LifeStatus { get; private set; }
+    public Card Card { get { return _card; } }
+    public LifeSystem LifeStatus { get; private set; }
     protected UiLifeEnemy UILife { get; private set; }
     public Transform Muzzle { get { return _muzzle; } }
 

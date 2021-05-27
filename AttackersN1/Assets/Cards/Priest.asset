@@ -13,9 +13,11 @@ MonoBehaviour:
   m_Name: Priest
   m_EditorClassIdentifier: 
   cardName: Priest
-  life: 0
-  attack: 0
-  attackSpeed: 0
-  enemyDetectionRange: 0
-  enemyAttackRange: 0
+  life: 60
+  attackDamage: 10
+  attackSpeed: 1.1
+  attackArea: 3.22
+  enemyDetectionRange: 30
+  enemyAttackRange: 3.5
   prefab: {fileID: 2124052141299402020, guid: 6bc909a71954a114d9937fc594696087, type: 3}
+  manaCost: 4

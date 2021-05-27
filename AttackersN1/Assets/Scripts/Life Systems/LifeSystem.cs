@@ -22,12 +22,12 @@ public class LifeSystem
 
     public void RemoveLife(float valueToRemove)
     {
-        if (valueToRemove < 0)
-        {
-            Debug.LogError("LifeSystem.RemoveLife() : Valor deve ser maior que zero.");
-            return;
-        }
-        else
+        //if (valueToRemove < 0)
+        //{
+        //    Debug.LogError("LifeSystem.RemoveLife() : Valor deve ser maior que zero.");
+        //    return;
+        //}
+        //else
             CurrentLife -= valueToRemove;
     }
 
