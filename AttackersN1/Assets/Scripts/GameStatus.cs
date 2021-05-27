@@ -20,6 +20,10 @@ public class GameStatus : MonoBehaviour
     [SerializeField] private TMP_Text _txtCurrentMana;
     [SerializeField] private int _currentMana;
 
+    [Header("Enemy Spawn")]
+    [SerializeField] private float timeStep;
+    [SerializeField] private int enemiesToSpawn;
+
     private void Awake()
     {
         if (Instance == null)
@@ -31,9 +35,16 @@ public class GameStatus : MonoBehaviour
     private void Start()
     {
         _mouse = GetComponent<Mouse>();
+        
         _currentMana = _inicialMana;
         UpdateManaText();
         StartCoroutine(ManaRegeneration());
+
+        Spawner[] spawners = GameObject.FindObjectsOfType<Spawner>();
+        foreach (Spawner spawner in spawners)
+        {
+            spawner.InitSpawn(enemiesToSpawn, timeStep);
+        }
     }
 
     private void OnEnable()
