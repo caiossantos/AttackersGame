@@ -18,6 +18,7 @@ public class Objective : Enemy
         if (LifeStatus.IsDead())
         {
             UILife.Destroy();
+            GameStatus.Instance.SetSuccessState(true);
             Destroy(gameObject);
         }
     }

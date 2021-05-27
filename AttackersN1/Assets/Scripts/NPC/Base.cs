@@ -18,6 +18,7 @@ public class Base : Enemy
         if (LifeStatus.IsDead())
         {
             UILife.Destroy();
+            GameStatus.Instance.SetSuccessState(false);
             Destroy(gameObject);
         }
     }

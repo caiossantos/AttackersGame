@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1262127421e183d45a60ff751dd555d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _lifeUI: {fileID: 6315666523205481511, guid: fa990b11691cdae4abfcae72276f9edc, type: 3}
+  _lifeUI: {fileID: 6315666523205481511, guid: f5a9a90065de325448439b0c2f0fafc5, type: 3}
   _card: {fileID: 11400000, guid: b1c8ff9fad9ddec46a088e7104705b4e, type: 2}
   _muzzle: {fileID: 2372846752991733495}
   _arrow: {fileID: 4239651224020591435, guid: d087fb7e5d32b9e44bb5557b64515e73, type: 3}
