@@ -11,4 +11,5 @@ public class Card : ScriptableObject
     public float enemyDetectionRange;
     public float enemyAttackRange;
     public GameObject prefab;
+    public int manaCost;
 }

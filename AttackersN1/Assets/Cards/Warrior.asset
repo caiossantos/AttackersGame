@@ -20,3 +20,4 @@ MonoBehaviour:
   enemyDetectionRange: 8
   enemyAttackRange: 1.5
   prefab: {fileID: 9080564065670873654, guid: c123ec12d250ab04d83193f74d042949, type: 3}
+  manaCost: 1

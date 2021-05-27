@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class CardActions : MonoBehaviour
 {
@@ -12,10 +13,13 @@ public class CardActions : MonoBehaviour
     }
 
     [SerializeField] private Card _card;
+    [SerializeField] private TMP_Text _manaCostText;
 
     private Button button;
 
     private void Awake() => button = GetComponent<Button>();
+
+    private void Start() => _manaCostText.SetText(_card.manaCost.ToString());
 
     private void OnEnable() => button.onClick.AddListener(CardSelected);
 
