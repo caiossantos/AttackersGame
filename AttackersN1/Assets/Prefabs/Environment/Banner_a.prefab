@@ -92,7 +92,7 @@ BoxCollider:
   m_GameObject: {fileID: 160852}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 2, y: 0.24, z: 0.20784649}
   m_Center: {x: -0.00000014901161, y: 4.5, z: 0.0000001899898}
@@ -192,8 +192,8 @@ SkinnedMeshRenderer:
   m_BlendShapeWeights: []
   m_RootBone: {fileID: 416222}
   m_AABB:
-    m_Center: {x: -0.00000010897705, y: -0.00036996603, z: 3.0871286}
-    m_Extent: {x: 0.6860503, y: 0.15108082, z: 1.5527442}
+    m_Center: {x: 0.00000017881393, y: -0.00036983192, z: 3.087129}
+    m_Extent: {x: 0.6860498, y: 0.15108009, z: 1.5527439}
   m_DirtyAABB: 0
 --- !u!183 &18378694
 Cloth:
@@ -202,7 +202,7 @@ Cloth:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 168354}
-  m_Enabled: 1
+  m_Enabled: 0
   m_StretchingStiffness: 1
   m_BendingStiffness: 0
   m_UseTethers: 1
@@ -580,7 +580,7 @@ CapsuleCollider:
   m_GameObject: {fileID: 168354}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   m_Radius: 0.15
   m_Height: 5
   m_Direction: 1
@@ -687,7 +687,7 @@ Animation:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 195440}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Animation: {fileID: 7400000, guid: 32a76ce810dead94fab542c627ad025b, type: 3}
   m_Animations:

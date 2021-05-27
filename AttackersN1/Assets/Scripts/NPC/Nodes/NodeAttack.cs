@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class NodeAttack : BTNode
 {
@@ -27,7 +28,7 @@ public class NodeAttack : BTNode
         {
             if (collider.gameObject != root.gameObject && collider.CompareTag(_enemyTag))
             {
-                if (collider.GetComponent<Enemy>() != null)
+                if (collider.GetComponent<IDamage>() != null)
                 {
                     hasAttacked = true;
                     break;

@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.AI;
 
 public class NodeIsMoving : BTNode
@@ -10,7 +11,7 @@ public class NodeIsMoving : BTNode
     {
         status = Status.FAILURE;
 
-        if (_navMeshAgent.velocity.z != 0 || _navMeshAgent.velocity.x != 0)
+        if (_navMeshAgent.velocity != Vector3.zero)
             status = Status.SUCCESS;
 
         yield break;

@@ -10,7 +10,7 @@ public class NodeStopNavMeshDestination : BTNode
 
     public override IEnumerator Run(BTRoot root)
     {
-        yield return new WaitForSeconds(.4f);
+        //yield return new WaitForSeconds(.4f);
 
         status = Status.FAILURE;
 

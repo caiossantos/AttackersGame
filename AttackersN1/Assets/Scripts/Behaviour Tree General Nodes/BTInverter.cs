@@ -11,14 +11,16 @@ class BTInverter : BTNode
             if (node.status == Status.FAILURE)
             {
                 status = Status.SUCCESS;
-                break;
+                yield break;
             } 
             else if (node.status == Status.SUCCESS)
             {
                 status = Status.FAILURE;
-                break;
+                yield break;
             }
         }
+
+        status = Status.RUNNING;
 
         yield break;
     }

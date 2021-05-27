@@ -4,7 +4,7 @@ public abstract class Enemy : MonoBehaviour, IDamage
 {
     [SerializeField] private GameObject _lifeUI;
     [SerializeField] private Card _card;
-    [SerializeField] private Transform _muzzle;
+    [SerializeField] private Transform _muzzle = null;
 
     protected Card Card { get { return _card; } }
     protected LifeSystem LifeStatus { get; private set; }

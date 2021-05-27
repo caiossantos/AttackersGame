@@ -5,8 +5,8 @@ using UnityEngine.AI;
 
 public class Skeleton : Enemy
 {
-    private string _enemyTag = "Ally";
-    private string _objectiveTag = "EnemyObjective";
+    private const string ENEMY_TAG = "Ally";
+    private const string OBJECTIVE_TAG = "EnemyObjective";
 
     private BTRoot behaviour;
     private Animator _animator;
@@ -35,40 +35,38 @@ public class Skeleton : Enemy
 
         #region ATTACK_ENEMY
         BTSequence attackSequence1 = new BTSequence();
-        attackSequence1.children.Add(new NodeEnemyNear(_enemyTag, Card.enemyDetectionRange));
-        BTInverter inverterEnemyNearAttackRange = new BTInverter();
-        inverterEnemyNearAttackRange.children.Add(new NodeEnemyNear(_enemyTag, Card.enemyAttackRange));
-        attackSequence1.children.Add(inverterEnemyNearAttackRange);
-        BTInverter inverterMove = new BTInverter();
-        inverterMove.children.Add(new NodeIsMoving(_navMeshAgent));
-        attackSequence1.children.Add(new NodeGoToTarget(_enemyTag, _navMeshAgent));
+        attackSequence1.children.Add(new NodeEnemyNear(ENEMY_TAG, Card.enemyDetectionRange));
+        BTInverter isEnemyOutsideMyAttackRange = new BTInverter();
+        isEnemyOutsideMyAttackRange.children.Add(new NodeEnemyNear(ENEMY_TAG, Card.enemyAttackRange));
+        attackSequence1.children.Add(isEnemyOutsideMyAttackRange);
+        attackSequence1.children.Add(new NodeGoToTarget(ENEMY_TAG, _navMeshAgent));
 
         BTSequence attackSequence2 = new BTSequence();
-        attackSequence2.children.Add(new NodeEnemyNear(_enemyTag, Card.enemyAttackRange));
+        attackSequence2.children.Add(new NodeEnemyNear(ENEMY_TAG, Card.enemyAttackRange));
         attackSequence2.children.Add(new NodeStopNavMeshDestination(_navMeshAgent));
-
-        BTSequence attackSequence3 = new BTSequence();
-        attackSequence3.children.Add(new NodeEnemyNear(_enemyTag, Card.enemyAttackRange));
-        attackSequence3.children.Add(new NodeStopNavMeshDestination(_navMeshAgent));
-        attackSequence3.children.Add(new NodeAttack(_enemyTag, Card.enemyAttackRange));
+        attackSequence2.children.Add(new NodeAttack(ENEMY_TAG, Card.attackArea));
 
         BTSelector attackSelector1 = new BTSelector();
-        attackSelector1.children.Add(attackSequence3);
         attackSelector1.children.Add(attackSequence2);
         attackSelector1.children.Add(attackSequence1);
+        attackSelector1.children.Add(attackSequence2);
         #endregion
 
         #region OBJECTIVE_ATTACK
         BTSequence objectiveSequence1 = new BTSequence();
-        BTInverter objectiveInverter1 = new BTInverter();
-        objectiveInverter1.children.Add(new NodeEnemyNear(_objectiveTag, Card.enemyAttackRange));
-        objectiveSequence1.children.Add(objectiveInverter1);
-        objectiveSequence1.children.Add(new NodeGoToTarget(_objectiveTag, _navMeshAgent));
+        BTInverter isObjectiveOutsideMyAttackRange = new BTInverter();
+        isObjectiveOutsideMyAttackRange.children.Add(new NodeEnemyNear(OBJECTIVE_TAG, Card.enemyAttackRange));
+        objectiveSequence1.children.Add(isObjectiveOutsideMyAttackRange);
+        attackSequence1.children.Add(new NodeEnemyNear(OBJECTIVE_TAG, Card.enemyDetectionRange));
+        BTInverter imStoppedObjective = new BTInverter();
+        imStoppedObjective.children.Add(new NodeIsMoving(_navMeshAgent));
+        objectiveSequence1.children.Add(imStoppedObjective);
+        objectiveSequence1.children.Add(new NodeGoToTarget(OBJECTIVE_TAG, _navMeshAgent));
 
         BTSequence objectiveSequence2 = new BTSequence();
-        objectiveSequence2.children.Add(new NodeEnemyNear(_objectiveTag, Card.enemyAttackRange));
+        objectiveSequence2.children.Add(new NodeEnemyNear(OBJECTIVE_TAG, Card.enemyAttackRange));
         objectiveSequence2.children.Add(new NodeStopNavMeshDestination(_navMeshAgent));
-        objectiveSequence2.children.Add(new NodeAttack(_objectiveTag, Card.attackArea));
+        objectiveSequence2.children.Add(new NodeAttack(OBJECTIVE_TAG, Card.attackArea));
 
         BTSelector objectiveSelector1 = new BTSelector();
         objectiveSelector1.children.Add(objectiveSequence2);
@@ -107,19 +105,19 @@ public class Skeleton : Enemy
         transform.LookAt(enemy.position, Vector3.up);
 
         if (!_isAttacking)
-            StartCoroutine(DoAttack());
+            StartCoroutine(DoAttack(tag));
     }
 
-    private IEnumerator DoAttack()
+    private IEnumerator DoAttack(string tag)
     {
         Collider[] colliders = Physics.OverlapSphere(Muzzle.transform.position, Card.attackArea);
         if (colliders != null)
         {
             foreach (Collider collider in colliders)
             {
-                if (collider.gameObject != gameObject && collider.CompareTag(_enemyTag))
+                if (collider.gameObject != gameObject && collider.CompareTag(tag))
                 {
-                    Enemy damage = collider.GetComponent<Enemy>();
+                    IDamage damage = collider.GetComponent<IDamage>();
                     if (damage != null)
                         damage.Damage(Card.attackDamage);
                 }
@@ -132,4 +130,16 @@ public class Skeleton : Enemy
 
         _isAttacking = false;
     }
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, Card.enemyDetectionRange);
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, Card.enemyAttackRange);
+
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(Muzzle.transform.position, Card.attackArea);
+    }
+
 }
