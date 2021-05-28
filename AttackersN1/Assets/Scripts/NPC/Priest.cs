@@ -93,8 +93,8 @@ public class Priest : Enemy
         objectiveSelector1.children.Add(objectiveSequence1);
         #endregion
 
-        BTSelector masterSelector = new BTSelector();
-        masterSelector.children.Add(healSelector1);
+        //BTSelector masterSelector = new BTSelector();
+        //masterSelector.children.Add(healSelector1);
         //masterSelector.children.Add(attackSelector1);
         //masterSelector.children.Add(objectiveSelector1);
 
@@ -111,11 +111,8 @@ public class Priest : Enemy
         if (enemy != null)
         {
             transform.LookAt(enemy.transform.position, Vector3.up);
-            Vector3 txtPos = new Vector3(enemy.transform.position.x, enemy.transform.position.y + 2f, enemy.transform.position.z);
-            //var txtLifeEarned = Instantiate(txtLifeEarnedFeedback, txtPos, Quaternion.identity);
-            Instantiate(txtLifeEarnedFeedback, enemy.transform.position, Quaternion.identity);
-            //txtLifeEarned.GetComponent<UiTxtLifeEarned>().ChangeText(Card.attackDamage);
         }
+
         if (!_isAttacking)
         {
             StartCoroutine(DoAttack(tag, -Card.attackDamage, Card.attackArea));

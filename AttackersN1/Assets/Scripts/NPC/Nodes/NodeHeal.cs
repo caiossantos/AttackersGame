@@ -29,7 +29,7 @@ public class NodeHeal : BTNode
                 }
             }
         }
-        //enemy.LifeStatus.CurrentLife < (enemy.Card.life - (enemy.Card.life * 0.8))
+
         status = Status.FAILURE;
 
         yield break;
