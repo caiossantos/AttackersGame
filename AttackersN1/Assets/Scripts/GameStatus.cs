@@ -68,6 +68,20 @@ public class GameStatus : MonoBehaviour
 
     private void Update()
     {
+        Timer();
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Pause();
+        }
+
+        CharacterPlacement();
+    }
+
+
+    private void OnDisable() => CardActions.OnCardSelected -= CardSelected;
+    private void Timer()
+    {
         if (timer <= 0f)
         {
             SetSuccessState(false);
@@ -77,15 +91,7 @@ public class GameStatus : MonoBehaviour
             timer -= Time.deltaTime;
             _txtTimer.SetText("{0:00}:{1:00}", (int)(timer / 60), (int)(timer % 60));
         }
-
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            Pause();
-        }
-
-        CharacterPlacement();
     }
-    private void OnDisable() => CardActions.OnCardSelected -= CardSelected;
 
     public void Pause()
     {
@@ -115,7 +121,6 @@ public class GameStatus : MonoBehaviour
         }
     }
 
-    private void UpdateManaText() => _txtCurrentMana.SetText($"<b>{_currentMana}</b>");
 
     private void CharacterPlacement()
     {
@@ -189,6 +194,6 @@ public class GameStatus : MonoBehaviour
     public void BtnPlayAgain() => SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     public void BtnBackToMenu() => SceneManager.LoadScene(MENU_SCENE_NAME);
     public void BtnQuitGame() => Application.Quit();
-
+    private void UpdateManaText() => _txtCurrentMana.SetText($"<b>{_currentMana}</b>");
     #endregion
 }
